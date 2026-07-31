@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>An Unsent Letter ✨</title>
+  
+  <!-- Canvas Confetti Engine for Victory Blast -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #030108;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Fullscreen Parametric Burning Heart Background Canvas */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ==========================================================
+       OPENING: Interactive Wax-Sealed Envelope Intro
+       ========================================================== */
+    .opening-wrapper {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .envelope-box {
+      width: 310px;
+      height: 200px;
+      background: linear-gradient(145deg, #180e28, #0c0617);
+      border: 1px solid rgba(255, 45, 85, 0.3);
+      border-radius: 18px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(255, 45, 85, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .envelope-box:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.95),
+        0 0 45px rgba(255, 45, 85, 0.4);
+    }
+
+    /* Flap Lines */
+    .envelope-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-left: 155px solid transparent;
+      border-right: 155px solid transparent;
+      border-top: 105px solid rgba(255, 45, 85, 0.12);
+      border-radius: 8px;
+    }
+
+    /* Wax Seal Button */
+    .wax-seal-btn {
+      width: 66px;
+      height: 66px;
+      background: radial-gradient(circle at 35% 35%, #ff2d55, #881337);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 
+        0 4px 18px rgba(0, 0, 0, 0.8),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        0 0 20px rgba(255, 45, 85, 0.6);
+      z-index: 2;
+      animation: pulseSeal 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSeal {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 45, 85, 0.6); }
+      50% { transform: scale(1.08); box-shadow: 0 0 35px rgba(255, 45, 85, 0.9); }
+    }
+
+    .wax-seal-btn span {
+      font-size: 1.5rem;
+    }
+
+    .unseal-hint {
+      margin-top: 22px;
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #ff9ebb;
+      text-shadow: 0 0 10px rgba(255, 45, 85, 0.5);
+    }
+
+    /* ==========================================================
+       Obsidian Glassmorphism Main Card (Optimized for Long Text)
+       ========================================================== */
+    .card-container {
+      position: relative;
+      z-index: 10;
+      width: 92%;
+      max-width: 480px;
+      max-height: 88vh;
+      background: rgba(12, 8, 24, 0.82);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 45, 85, 0.28);
+      border-radius: 28px;
+      padding: 32px 24px 28px 24px;
+      box-shadow: 
+        0 0 50px rgba(255, 45, 85, 0.25),
+        0 20px 50px rgba(0, 0, 0, 0.85),
+        inset 0 0 20px rgba(255, 45, 85, 0.05);
+      text-align: center;
+      color: #ffffff;
+      opacity: 0;
+      transform: scale(0.85) translateY(20px);
+      pointer-events: none;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
+      display: none;
+      flex-direction: column;
+    }
+
+    .card-container.active {
+      display: flex;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Photo / Avatar Holder */
+    .photo-wrapper {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 16px auto;
+      flex-shrink: 0;
+    }
+
+    .photo-frame {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #ff2d55;
+      box-shadow: 0 0 20px rgba(255, 45, 85, 0.6);
+      position: relative;
+      z-index: 2;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-pulse {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 45, 85, 0.5);
+      animation: ringPulse 2s infinite ease-out;
+      z-index: 1;
+    }
+
+    @keyframes ringPulse {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #ff9ebb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      flex-shrink: 0;
+    }
+
+    /* Scrollable Box for Long Letter Content */
+    .typewriter-box {
+      font-size: 0.96rem;
+      line-height: 1.7;
+      color: #d8cfed;
+      text-align: left;
+      margin-bottom: 18px;
+      font-weight: 400;
+      font-family: 'Georgia', serif;
+      overflow-y: auto;
+      padding-right: 8px;
+      max-height: 40vh;
+    }
+
+    /* Custom Romantic Scrollbar */
+    .typewriter-box::-webkit-scrollbar {
+      width: 5px;
+    }
+    .typewriter-box::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+    }
+    .typewriter-box::-webkit-scrollbar-thumb {
+      background: rgba(255, 45, 85, 0.4);
+      border-radius: 10px;
+    }
+
+    .question-prompt {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ff2d55;
+      margin-bottom: 20px;
+      text-shadow: 0 0 12px rgba(255, 45, 85, 0.5);
+      flex-shrink: 0;
+    }
+
+    /* Button Area */
+    .action-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      position: relative;
+      min-height: 50px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+
+    #yesBtn {
+      background: linear-gradient(135deg, #ff2d55 0%, #ff6b81 100%);
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(255, 45, 85, 0.5);
+      z-index: 2;
+    }
+
+    #yesBtn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 35px rgba(255, 45, 85, 0.8);
+    }
+
+    #noBtn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #a8a0c0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      position: absolute;
+      right: 15px;
+      touch-action: none;
+      z-index: 100;
+    }
+
+    /* Success Card Overlay */
+    .success-card {
+      display: none;
+    }
+
+    .giant-emoji {
+      font-size: 4rem;
+      margin-bottom: 10px;
+      animation: floatEmoji 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatEmoji {
+      0% { transform: translateY(0px) scale(1); }
+      100% { transform: translateY(-12px) scale(1.1); }
+    }
+
+    /* Raining Diamonds & Hearts Overlay */
+    #rainOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 5;
+      overflow: hidden;
+      display: none;
+    }
+
+    .rain-item {
+      position: absolute;
+      top: -60px;
+      animation: rainFall linear infinite;
+    }
+
+    @keyframes rainFall {
+      0% {
+        transform: translateY(-60px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.9;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fullscreen Parametric Burning Heart Background Canvas -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Falling Love & Diamond Rain Overlay -->
+  <div id="rainOverlay"></div>
+
+  <!-- Interactive Wax-Sealed Envelope Opening -->
+  <div class="opening-wrapper" id="envelopeView">
+    <div class="envelope-box" onclick="openEnvelope()">
+      <div class="wax-seal-btn">
+        <span>💌</span>
+      </div>
+    </div>
+    <div class="unseal-hint">Tap Envelope to Unseal Letter</div>
+  </div>
+
+  <!-- Main Proposal Card Page -->
+  <div class="card-container" id="proposalCard">
+    <div class="photo-wrapper">
+      <div class="photo-pulse"></div>
+      <div class="photo-frame">
+        <!-- EDIT YOUR PHOTO LINK HERE -->
+        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=400" alt="Special Memory">
+      </div>
+    </div>
+
+    <!-- EDIT HER NAME HERE -->
+    <h1>Hey Life Partner,</h1>
+    
+    <div class="typewriter-box" id="typewriter"></div>
+    <div class="question-prompt">Will you be my Life Long Partner? 💖</div>
+
+    <div class="action-group">
+      <button class="btn" id="yesBtn" onclick="acceptProposal()">Yes! ❤️</button>
+      <button class="btn" id="noBtn">No 😜</button>
+    </div>
+  </div>
+
+  <!-- Success Card Page -->
+  <div class="card-container success-card" id="successCard">
+    <div class="giant-emoji">💍✨💖</div>
+    <h1>I Knew You'd Say Yes!</h1>
+    <p style="color: #d8cfed; line-height: 1.6; margin-top: 12px;">
+      Every line of code and every heartbeat led to this moment. Get ready, we are celebrating soon! 🎉
+    </p>
+  </div>
+
+  <script>
+    // --- 1. Pure HTML5 Burning Heart Engine ---
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    let heartPoints = [];
+    let ambientStars = [];
+    let flameParticles = [];
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      generateHeartPoints();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    // Parametric Heart Geometry
+    function getHeartPoint(t, scale) {
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+      return {
+        x: width / 2 + x * scale,
+        y: height / 2 + y * scale
+      };
+    }
+
+    function generateHeartPoints() {
+      heartPoints = [];
+      const scale = Math.min(width, height) / 42;
+      for (let t = 0; t < Math.PI * 2; t += 0.05) {
+        heartPoints.push(getHeartPoint(t, scale));
+      }
+    }
+
+    // Ambient Stars
+    for (let i = 0; i < 70; i++) {
+      ambientStars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        size: Math.random() * 1.8 + 0.5,
+        speedY: -(Math.random() * 0.4 + 0.1),
+        opacity: Math.random() * 0.7 + 0.3
+      });
+    }
+
+    // Flame Particle Class
+    class FlameEmber {
+      constructor(originX, originY) {
+        this.x = originX + (Math.random() - 0.5) * 12;
+        this.y = originY;
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = -(Math.random() * 2.2 + 1.2);
+        this.life = 1.0;
+        this.decay = Math.random() * 0.03 + 0.015;
+        this.size = Math.random() * 4 + 2;
+        
+        const emberColors = ['#ffffff', '#fbbf24', '#ff6b00', '#ff2d55'];
+        this.color = emberColors[Math.floor(Math.random() * emberColors.length)];
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= this.decay;
+      }
+
+      draw() {
+        if (this.life <= 0) return;
+        ctx.save();
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = '#ff2d55';
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.life;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function renderCanvas() {
+      ctx.fillStyle = 'rgba(3, 1, 8, 0.25)';
+      ctx.fillRect(0, 0, width, height);
+
+      // Render Ambient Stars
+      ambientStars.forEach(s => {
+        s.y += s.speedY;
+        if (s.y < 0) s.y = height;
+        ctx.fillStyle = `rgba(255, 158, 187, ${s.opacity})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Render Glowing Heart
+      if (heartPoints.length > 0) {
+        ctx.save();
+        ctx.shadowBlur = 22;
+        ctx.shadowColor = '#ff2d55';
+        ctx.strokeStyle = '#ff2d55';
+        ctx.lineWidth = 2.5;
+
+        ctx.beginPath();
+        ctx.moveTo(heartPoints[0].x, heartPoints[0].y);
+        for (let i = 1; i < heartPoints.length; i++) {
+          ctx.lineTo(heartPoints[i].x, heartPoints[i].y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+
+        // Embers
+        for (let i = 0; i < 4; i++) {
+          const randomPt = heartPoints[Math.floor(Math.random() * heartPoints.length)];
+          flameParticles.push(new FlameEmber(randomPt.x, randomPt.y));
+        }
+      }
+
+      // Update & Draw Embers
+      for (let i = flameParticles.length - 1; i >= 0; i--) {
+        flameParticles[i].update();
+        flameParticles[i].draw();
+        if (flameParticles[i].life <= 0) {
+          flameParticles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(renderCanvas);
+    }
+
+    resizeCanvas();
+    renderCanvas();
+
+    // --- 2. Interactive Envelope Opening ---
+    function openEnvelope() {
+      const env = document.getElementById('envelopeView');
+      const card = document.getElementById('proposalCard');
+
+      env.style.opacity = '0';
+      env.style.transform = 'scale(0.8)';
+      
+      setTimeout(() => {
+        env.style.display = 'none';
+        card.classList.add('active');
+        typeWriter();
+      }, 500);
+    }
+
+    // --- 3. Full Unsent Letter Typewriter Sequence ---
+    const messageText = `To the one who will never read this,\n\nI have always found a strange comfort in the background. Stepping into the light, especially to speak to you, feels like trying to breathe underwater. The words I desperately want to say get caught in my throat long before they ever reach my lips. So, I keep them locked away here instead.\n\nI don't think you realize how much space you occupy in my mind. While you go about your day, completely unaware, I am quietly memorizing the details. The way your expression changes when you're deep in thought, the specific cadence of your laugh, the light that seems to follow you even on the darkest days.\n\nIt is a strange and heavy thing to carry a love like this—one that exists entirely in a vacuum. I build entire worlds out of our brief interactions, playing them over and over until the edges wear thin. I know my silence probably looks like indifference from the outside, but inside, it is deafening.\n\nI keep this to myself because my silence feels safer than risking the fragile reality we currently share. To speak would be to shatter the glass. So, I ask for nothing in return. I don't need you to know, because just being allowed to witness you, even from a distance, is a quiet kind of magic that I am grateful for.\n\nForever yours, from the shadows.`;
+
+    let charIndex = 0;
+    const typewriterElement = document.getElementById('typewriter');
+
+    function typeWriter() {
+      if (charIndex < messageText.length) {
+        const char = messageText.charAt(charIndex);
+        if (char === '\n') {
+          typewriterElement.innerHTML += '<br>';
+        } else {
+          typewriterElement.innerHTML += char;
+        }
+        charIndex++;
+        
+        // Auto-scroll as text types out
+        typewriterElement.scrollTop = typewriterElement.scrollHeight;
+        
+        setTimeout(typeWriter, 18);
+      }
+    }
+
+    // --- 4. Dodging "No" Button ---
+    const noBtn = document.getElementById('noBtn');
+    const funnyCaptions = [
+      "No 😜", 
+      "Nice try! 😂", 
+      "Too slow! ⚡", 
+      "Not an option! 🙈", 
+      "Wrong button! 🚀", 
+      "Ops, missed me! 😜"
+    ];
+    let captionIndex = 0;
+
+    function dodgeNoButton(e) {
+      if (e) e.preventDefault();
+      
+      const padding = 35;
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+
+      captionIndex = (captionIndex + 1) % funnyCaptions.length;
+      noBtn.innerText = funnyCaptions[captionIndex];
+    }
+
+    noBtn.addEventListener('mouseover', dodgeNoButton);
+    noBtn.addEventListener('touchstart', dodgeNoButton);
+    noBtn.addEventListener('click', dodgeNoButton);
+
+    // --- 5. Proposal Acceptance Handler ---
+    function acceptProposal() {
+      document.getElementById('proposalCard').style.display = 'none';
+      const successCard = document.getElementById('successCard');
+      successCard.classList.add('active');
+
+      playVictoryAudio();
+      fireConfetti();
+      startRainOverlay();
+    }
+
+    // --- 6. Web Audio Victory Synth ---
+    function playVictoryAudio() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioCtx();
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+        
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = freq;
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          const startTime = audioCtx.currentTime + i * 0.07;
+          osc.start(startTime);
+          gain.gain.setValueAtTime(0.25, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.5);
+          osc.stop(startTime + 0.5);
+        });
+      } catch (e) {}
+    }
+
+    // --- 7. Confetti Explosion ---
+    function fireConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 130,
+          spread: 85,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    // --- 8. Diamond & Heart Rain Overlay ---
+    function startRainOverlay() {
+      const overlay = document.getElementById('rainOverlay');
+      overlay.style.display = 'block';
+
+      const items = ['💍', '💖', '💎', '❤️', '✨', '💍', '💕'];
+
+      setInterval(() => {
+        const drop = document.createElement('div');
+        drop.classList.add('rain-item');
+        drop.innerText = items[Math.floor(Math.random() * items.length)];
+        drop.style.left = Math.random() * 100 + 'vw';
+        drop.style.fontSize = (Math.random() * 20 + 22) + 'px';
+
+        const fallDuration = Math.random() * 2 + 2.5;
+        drop.style.animationDuration = fallDuration + 's';
+
+        overlay.appendChild(drop);
+
+        setTimeout(() => drop.remove(), fallDuration * 1000);
+      }, 100);
+    }
+  </script>
+</body>
+</html>
