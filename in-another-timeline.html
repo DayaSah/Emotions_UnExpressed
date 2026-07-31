@@ -73,6 +73,23 @@
       0% { filter: drop-shadow(0 0 12px rgba(255, 220, 150, 0.5)); transform: scale(1); }
       100% { filter: drop-shadow(0 0 25px rgba(255, 235, 180, 0.9)); transform: scale(1.02); }
     }
+    /* Setting Sun */
+    .sun {
+      position: fixed;
+      top: 35px;
+      left: 45px;
+      width: 75px;
+      height: 75px;
+      z-index: 5;
+      pointer-events: none;
+      filter: drop-shadow(0 0 20px rgba(255, 120, 0, 0.6));
+      animation: sunBreathe 6s infinite alternate ease-in-out;
+    }
+
+    @keyframes sunBreathe {
+      0% { filter: drop-shadow(0 0 15px rgba(255, 100, 0, 0.5)); transform: scale(1); }
+      100% { filter: drop-shadow(0 0 30px rgba(255, 150, 50, 0.85)); transform: scale(1.03); }
+    }
 
     /* Firefly Canvas */
     #particleCanvas {
@@ -396,6 +413,7 @@
     @media (max-width: 768px) {
       body { padding-top: 100px; }
       .moon { width: 50px; height: 50px; top: 20px; right: 20px; }
+      .sun { width: 55px; height: 55px; top: 20px; left: 20px; }
       .storybook-page { padding: 45px 30px 55px; }
       .main-title { font-size: 1.9rem; }
       .act-title { font-size: 1.5rem; }
@@ -413,6 +431,17 @@
   <!-- Glowing Crescent Moon -->
   <svg class="moon" viewBox="0 0 100 100">
     <path d="M 55,10 A 38,38 0 1 0 90,58 A 30,30 0 1 1 55,10 Z" fill="#fff5d6" />
+  </svg>
+  <!-- Glowing Setting Sun -->
+  <svg class="sun" viewBox="0 0 100 100">
+    <defs>
+      <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffebd6" />
+        <stop offset="40%" stop-color="#ffb732" />
+        <stop offset="100%" stop-color="#d65c00" />
+      </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="45" fill="url(#sunGradient)" />
   </svg>
 
   <!-- Ambient Particle Canvas -->
