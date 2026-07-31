@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Lifetime in Paradise</title>
+  
+  <!-- Literary & Romantic Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dusk: #090a10;
+      --paper-bg: #fbf8f1;
+      --text-main: #2b201a;
+      --text-accent: #8b3a2b;
+      --gold-glow: rgba(255, 215, 140, 0.8);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-dusk);
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Generous Top Margin to prevent clipping */
+      padding: 120px 15px 100px 15px;
+      color: var(--text-main);
+      scroll-behavior: smooth;
+    }
+
+    /* Ambient Mountain Horizon Glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: 
+        radial-gradient(circle at 85% 15%, rgba(255, 230, 170, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(200, 110, 50, 0.15) 0%, rgba(9, 10, 16, 0.98) 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Crescent Moon */
+    .moon {
+      position: fixed;
+      top: 35px;
+      right: 45px;
+      width: 70px;
+      height: 70px;
+      z-index: 5;
+      pointer-events: none;
+      filter: drop-shadow(0 0 15px var(--gold-glow));
+      animation: moonBreathe 5s infinite alternate ease-in-out;
+    }
+
+    @keyframes moonBreathe {
+      0% { filter: drop-shadow(0 0 12px rgba(255, 220, 150, 0.5)); transform: scale(1); }
+      100% { filter: drop-shadow(0 0 25px rgba(255, 235, 180, 0.9)); transform: scale(1.02); }
+    }
+
+    /* Firefly Canvas */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Main Story Container */
+    .masterpiece-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 800px;
+      animation: fadeUp 2s ease-out forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Top Glowing Badge */
+    .universe-badge {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      color: #fff0df;
+      text-shadow: 0 0 8px #fff, 0 0 15px #ffb366, 0 0 25px #e66a00;
+      animation: badgePulse 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes badgePulse {
+      0% { opacity: 0.8; }
+      100% { opacity: 1; text-shadow: 0 0 12px #fff, 0 0 20px #ffcc80, 0 0 35px #ff8800; }
+    }
+
+    /* The Parchment Page */
+    .storybook-page {
+      background: var(--paper-bg);
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.85), rgba(255,255,255,0.3)),
+        radial-gradient(circle at 50% 0%, rgba(240, 225, 205, 0.6) 0%, transparent 70%);
+      padding: 70px 80px 85px;
+      border-radius: 8px;
+      box-shadow: 
+        0 30px 70px rgba(0,0,0,0.65),
+        0 10px 25px rgba(0,0,0,0.4),
+        inset 0 0 60px rgba(210, 190, 170, 0.3);
+      position: relative;
+    }
+
+    /* Header & Quote */
+    .story-header {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .main-title {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: 1.5px;
+      line-height: 1.3;
+      margin-bottom: 25px;
+    }
+
+    .frost-quote {
+      background: linear-gradient(90deg, transparent, rgba(139, 58, 43, 0.04), transparent);
+      border-left: none;
+      padding: 25px 35px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #4a362c;
+      line-height: 1.7;
+      position: relative;
+    }
+
+    .frost-quote::before, .frost-quote::after {
+      content: '✦';
+      position: absolute;
+      color: rgba(139, 58, 43, 0.3);
+      font-size: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .frost-quote::before { top: 0; }
+    .frost-quote::after { bottom: 0; }
+
+    .frost-quote footer {
+      text-align: right;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-accent);
+      margin-top: 12px;
+      font-style: normal;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Section Styling */
+    .act {
+      margin-bottom: 45px;
+    }
+
+    .act-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-accent);
+      margin-bottom: 20px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .act-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 2px;
+      background: var(--text-accent);
+      margin: 10px auto 0;
+      opacity: 0.4;
+    }
+
+    .prose p {
+      font-size: 1.25rem;
+      line-height: 1.85;
+      color: #332822;
+      margin-bottom: 22px;
+      text-align: justify;
+    }
+
+    .prose ul {
+      margin: 20px 0 25px 30px;
+    }
+
+    .prose li {
+      font-size: 1.22rem;
+      line-height: 1.8;
+      color: #3b2d26;
+      margin-bottom: 12px;
+    }
+
+    .prose em {
+      font-weight: 600;
+      color: var(--text-accent);
+    }
+
+    /* Modern Timeline Component */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 40px 0;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 27px;
+      width: 2px;
+      background: rgba(139, 58, 43, 0.2);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 35px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-accent);
+      box-shadow: 0 0 8px rgba(139, 58, 43, 0.6);
+    }
+
+    .timeline-age {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--text-accent);
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      font-size: 1.15rem;
+      color: #4a382d;
+      line-height: 1.5;
+    }
+
+    /* Modern Family Cards */
+    .family-cards {
+      display: flex;
+      gap: 20px;
+      margin: 35px 0;
+    }
+
+    .card {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(139, 58, 43, 0.15);
+      border-radius: 8px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+      transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+
+    .card-desc {
+      font-size: 1.15rem;
+      color: #55443a;
+      line-height: 1.6;
+    }
+
+    /* Lifestyle Grid Component */
+    .lifestyle-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 35px 0;
+    }
+
+    .lifestyle-item {
+      background: rgba(245, 235, 225, 0.5);
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 3px solid #6b8e23;
+    }
+
+    .lifestyle-item.market { border-color: #4682b4; }
+    .lifestyle-item.drive { border-color: #cd853f; grid-column: 1 / -1; } /* Spans full width on desktop */
+
+    .ls-title {
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ls-desc {
+      font-size: 1.12rem;
+      line-height: 1.6;
+      color: #4a3a30;
+    }
+
+    /* Decorative Divider */
+    .divider {
+      text-align: center;
+      margin: 45px 0;
+      color: #c4b09c;
+      font-size: 1.5rem;
+      letter-spacing: 20px;
+    }
+
+    /* Final Poem Component */
+    .poem-box {
+      margin-top: 50px;
+      text-align: center;
+      padding: 40px 20px;
+      background: radial-gradient(circle, rgba(139, 58, 43, 0.03) 0%, transparent 70%);
+      border-radius: 12px;
+    }
+
+    .poem-title {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 3.2rem;
+      color: var(--text-accent);
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .poem-lines {
+      font-size: 1.4rem;
+      line-height: 2;
+      font-style: italic;
+      color: #382820;
+    }
+
+    .poem-lines p {
+      margin-bottom: 18px;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      body { padding-top: 100px; }
+      .moon { width: 50px; height: 50px; top: 20px; right: 20px; }
+      .storybook-page { padding: 45px 30px 55px; }
+      .main-title { font-size: 1.9rem; }
+      .act-title { font-size: 1.5rem; }
+      .prose p, .prose li { font-size: 1.15rem; text-align: left; }
+      .family-cards, .lifestyle-grid { flex-direction: column; grid-template-columns: 1fr; }
+      .lifestyle-item.drive { grid-column: auto; }
+      .poem-lines { font-size: 1.25rem; }
+      .poem-title { font-size: 2.6rem; }
+      .frost-quote { padding: 20px; font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glowing Crescent Moon -->
+  <svg class="moon" viewBox="0 0 100 100">
+    <path d="M 55,10 A 38,38 0 1 0 90,58 A 30,30 0 1 1 55,10 Z" fill="#fff5d6" />
+  </svg>
+
+  <!-- Ambient Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <div class="masterpiece-wrapper">
+    
+    <div class="universe-badge">✨ In Another Universe ✨</div>
+
+    <div class="storybook-page">
+      
+      <header class="story-header">
+        <h1 class="main-title">The Road Taken:<br>A Lifetime in Paradise</h1>
+        <div class="frost-quote">
+          "Two roads diverged in a yellow wood, and I—I took the one less traveled by, and that has made all the difference."
+          <footer>— Robert Frost</footer>
+        </div>
+      </header>
+
+      <div class="divider">✧ ✦ ✧</div>
+
+      <!-- I -->
+      <section class="act">
+        <h2 class="act-title">I: The Leap Across Room 204</h2>
+        <div class="prose">
+          <p>The afternoon sun was still slanting through the dusty windows of Room 204 when the teacher closed the textbook. But I didn't wait for the final bell to ring.</p>
+          <p>As the quiet hum of the classroom settled, I pushed back my chair, walked across the wooden floorboards, and stood directly in front of your desk in the sunlit corner. My heart was pounding, but my voice didn't shake. I looked into your eyes and laid down every unsaid thought: that to me, you were the sun; that I was tired of living in the shadows as a background character; and that I wanted to build a real life with you.</p>
+          <p>You looked up, startled at first, then a soft, radiant smile broke across your face. You tucked a strand of hair behind your ear, laughed softly, and said, <em>"I was wondering when you were finally going to walk over here."</em></p>
+          <p>That day, the classroom faded into history, but our shared journey began.</p>
+          <p>Through the rest of our school days and into our university years, we were inseparable. Where others saw romantic ideals, we lived them—studying together under late-night desk lamps, supporting each other through exams, and growing into partners in every sense of the word. We became the reference point among our friends for what true, grounded love looked like.</p>
+        </div>
+      </section>
+
+      <!-- II -->
+      <section class="act">
+        <h2 class="act-title">II: The Grind and the Grand Strategy</h2>
+        <div class="prose">
+          <p>Shortly after graduation, we stood before our families and exchanged our vows, stepping into the world as husband and wife.</p>
+          <p>We mapped out our future with absolute precision. We both secured stable government teaching positions—a noble profession that gave us structured hours, respect in the community, and a reliable foundation. But while our mornings were dedicated to shaping young minds in the classroom, our evenings were dedicated to building our financial freedom.</p>
+          <p>We mastered the stock market together. Combining disciplined technical logic, systematic swing trading strategies, and long-term dividend growth models, we turned our dual government salaries into an escalating compound portfolio:</p>
+          <ul>
+            <li><strong>The Early Years (Ages 22–25):</strong> Reinvesting a heavy majority of our joint income into blue-chip assets and high-yield indices, compounding our capital with steady, calculated discipline.</li>
+            <li><strong>The Turning Point (Ages 26–29):</strong> Capitalizing on market cycles through systematic swing trades, building a portfolio robust enough to generate passive dividend income that eclipsed our monthly teaching salaries.</li>
+          </ul>
+          <p>By the time we hit our 30th birthdays, our financial engine was self-sustaining. We officially retired from our teaching posts, leaving the formal workforce on our own terms, decades ahead of schedule.</p>
+          
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-age">Age 22</div>
+              <div class="timeline-desc">Government Teaching & Active Market Strategy</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-age">Age 30</div>
+              <div class="timeline-desc">Early Retirement to our Village Home in Pokhara</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-age">Age 50+</div>
+              <div class="timeline-desc">A Legacy of Peace, Generational Wealth & Family Joy</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- III -->
+      <section class="act">
+        <h2 class="act-title">III: Our Sanctuary in Pokhara</h2>
+        <div class="prose">
+          <p>With our freedom secured, we left the noise of industrialized city life behind and moved to a serene, picturesque village nestled in the hills of Pokhara.</p>
+          <p>We purchased a few ropanis of fertile, terraced land and built a traditional, two-story stone-and-wood cottage with a wide front porch facing the snow-capped peaks of Machhapuchhre and the Annapurna range.</p>
+          <p>It was here that our home truly came alive with the birth of our two children:</p>
+          
+          <div class="family-cards">
+            <div class="card">
+              <div class="card-title">Our Son</div>
+              <div class="card-desc">Curious, grounded, analytical, and sharp-minded.</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Our Daughter</div>
+              <div class="card-desc">Bright, empathetic, creative, with a smile that carried her mother's exact warmth.</div>
+            </div>
+          </div>
+
+          <p>Our days in the village were a perfect harmony of old-world peace and modern security:</p>
+
+          <div class="lifestyle-grid">
+            <div class="lifestyle-item">
+              <div class="ls-title">🌿 The Farm</div>
+              <div class="ls-desc">We cultivated an organic orange orchard, planted seasonal greens, kept honeybee hives, and tended a lush vegetable garden. Morning tea came with fresh air, clean soil, and zero industrial pollution.</div>
+            </div>
+            <div class="lifestyle-item market">
+              <div class="ls-title">📈 The Market</div>
+              <div class="ls-desc">An hour every morning was all we needed on the laptop to manage our swing positions and rebalance our portfolio. The steady cash flow provided a life of complete abundance.</div>
+            </div>
+            <div class="lifestyle-item drive">
+              <div class="ls-title">🏔️ The Drive</div>
+              <div class="ls-desc">In our driveway sat a reliable family SUV for mountain drives, a classic motorbike for quick runs into the city, and bicycles for quiet afternoon rides along the village dirt roads.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- IV -->
+      <section class="act">
+        <h2 class="act-title">IV: Watching the Harvest Grow</h2>
+        <div class="prose">
+          <p>Our children grew up surrounded by the best of both worlds—the calm, grounded discipline of village life and the highest quality education Pokhara had to offer. Every morning, they took the scenic ride down to premier institutions in the city, returning in the late afternoon to study on the porch as the sun set behind the mountains.</p>
+          <p>We watched them flourish:</p>
+          <ul>
+            <li>Our son inherited our love for systematic thinking and quantitative logic, eventually graduating top of his class in engineering.</li>
+            <li>Our daughter developed a deep passion for environmental science and architecture, designing sustainable systems inspired by the very hills she grew up in.</li>
+          </ul>
+          <p>We funded their big dreams effortlessly, without ever taking a loan or stressing over tuition, thanks to the quiet compound interest we had built years before.</p>
+        </div>
+      </section>
+
+      <!-- V -->
+      <section class="act">
+        <h2 class="act-title">V: Forever in Paradise</h2>
+        <div class="prose">
+          <p>Decades swept by like a gentle breeze across the valley.</p>
+          <p>Our children grew into exceptional adults, got married to wonderful partners, and established successful careers of their own. They returned to the village home for every festival and holiday, filling the courtyard with laughter, stories, and eventually, the small running footsteps of our grandchildren.</p>
+          <p>Now, as the golden afternoon light slants across our porch in Pokhara—the same light that used to fall across our classroom desks all those years ago—I sit beside you with a fresh cup of village tea.</p>
+          <p>We don't talk much about the past because we lived every single second of it to the fullest. You reach over, pick up my cup, and move it an inch to the side to clear space for our evening notes—the same casual, effortless gesture of a lifetime spent together.</p>
+          <p>I look across at you, watching the mountain sun reflect off your face, and hold your hand.</p>
+          <p>We chose the road across the room. We walked it all the way to paradise. And it made all the difference in the world.</p>
+        </div>
+      </section>
+
+      <div class="divider">✧ ✦ ✧</div>
+
+      <!-- FINAL POEM -->
+      <div class="poem-box">
+        <h2 class="poem-title">The Road Fully Traveled</h2>
+        <div class="poem-lines">
+          <p>Across the worn oak floor I dared to tread,<br>Leaving the quiet shadows left unsaid.</p>
+          <p>Where divergence called, I stepped into the blaze,<br>And gathered centuries in golden days.</p>
+          <p>From dusty chalkboards to the mountain’s crown,<br>We built an Eden where the world turned down.</p>
+          <p>The sun and moon, no longer far,<br>Now sit beneath the evening star.</p>
+          <p>Two blossoms bloomed, two souls have taken flight,<br>Leaving our hearth steeped in a serene light.</p>
+          <p>No longer wandering, no paths left untried—<br>The long road brought me softly to your side.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Canvas Particle System: Warm Dusk Fireflies & Stardust
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.reset();
+        // Scatter initially across the screen
+        this.y = Math.random() * height; 
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = height + (Math.random() * 50); // Start slightly below bottom
+        this.size = Math.random() * 2.2 + 0.5; // Varied sizes
+        this.speed = Math.random() * 0.4 + 0.15; // Slow, drifting upward
+        this.opacity = Math.random() * 0.5 + 0.2;
+        
+        // Swaying motion variables
+        this.sway = Math.random() * Math.PI * 2;
+        this.swaySpeed = Math.random() * 0.015 + 0.005;
+        
+        // Warm palette (Golds, Ambers, Soft Whites)
+        const colors = ['rgba(255, 215, 140,', 'rgba(255, 170, 80,', 'rgba(255, 245, 230,'];
+        this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      update() {
+        this.y -= this.speed;
+        this.sway += this.swaySpeed;
+        this.x += Math.sin(this.sway) * 0.5; // Gentle horizontal drift
+
+        // Reset if it floats above the screen
+        if (this.y < -20) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `${this.colorBase}${this.opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(255, 190, 100, 0.6)";
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Initialize Particles (75 count for a nice ambient fill)
+    for (let i = 0; i < 75; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
