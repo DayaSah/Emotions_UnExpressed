@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Words Unspoken</title>
+  
+  <!-- Romantic Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #0a0c14; /* Midnight Sky */
+      font-family: 'Cormorant Garamond', serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      /* Generous Top Padding to prevent any clipping */
+      padding: 110px 15px 80px 15px;
+      color: #2b231f;
+    }
+
+    /* Ambient Night Glow */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 80% 15%, rgba(255, 240, 200, 0.12) 0%, rgba(10, 12, 20, 0.98) 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Crescent Moon in Top Right */
+    .moon-container {
+      position: fixed;
+      top: 30px;
+      right: 35px;
+      width: 70px;
+      height: 70px;
+      z-index: 5;
+      pointer-events: none;
+      filter: drop-shadow(0 0 20px rgba(255, 235, 180, 0.7));
+      animation: moonGlow 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes moonGlow {
+      0% { filter: drop-shadow(0 0 15px rgba(255, 235, 180, 0.5)); }
+      100% { filter: drop-shadow(0 0 25px rgba(255, 240, 200, 0.85)); }
+    }
+
+    .moon-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Fullscreen Canvas for Snow and Love Emojis */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Main Container */
+    .letter-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 680px;
+      margin-top: 10px;
+      animation: gentleFadeIn 1.8s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    @keyframes gentleFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Elegant Parchment Paper Card */
+    .paper {
+      background: #fdfbf7;
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.85), rgba(255,255,255,0.3)),
+        radial-gradient(circle at 50% 0%, rgba(245, 235, 220, 0.6) 0%, transparent 60%);
+      padding: 65px 70px 75px;
+      border-radius: 6px;
+      box-shadow: 
+        0 20px 50px rgba(0,0,0,0.5),
+        0 5px 15px rgba(0,0,0,0.25),
+        inset 0 0 45px rgba(220, 210, 195, 0.35);
+      position: relative;
+    }
+
+    .paper::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      box-shadow: inset 0 0 80px rgba(180, 165, 150, 0.15);
+      pointer-events: none;
+      border-radius: 6px;
+    }
+
+    /* Typography */
+    .prelude {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: #5a4b41;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      padding: 0 15px;
+    }
+
+    .salutation {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 2.8rem;
+      color: #2b231f;
+      margin-bottom: 25px;
+    }
+
+    .prose p {
+      font-size: 1.25rem;
+      line-height: 1.85;
+      margin-bottom: 22px;
+      text-align: justify;
+      color: #38302a;
+    }
+
+    .prose p:last-of-type {
+      margin-bottom: 40px;
+    }
+
+    .highlight {
+      color: #1a1512;
+      font-weight: 500;
+    }
+
+    /* Divider */
+    .divider {
+      text-align: center;
+      margin: 40px 0;
+      color: #c4b5a3;
+      font-size: 1.5rem;
+      letter-spacing: 15px;
+    }
+
+    /* Poem Formatting */
+    .poem-title {
+      font-family: 'Pinyon Script', cursive;
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2b231f;
+    }
+
+    .poem {
+      text-align: center;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      font-style: italic;
+      color: #4a3d35;
+    }
+
+    .poem span {
+      display: block;
+    }
+
+    .poem .stanza-break {
+      height: 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      body {
+        padding-top: 90px;
+      }
+      .moon-container {
+        top: 15px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+      }
+      .paper {
+        padding: 45px 25px 55px;
+      }
+      .salutation {
+        font-size: 2.4rem;
+      }
+      .prelude {
+        font-size: 1.05rem;
+      }
+      .prose p {
+        font-size: 1.12rem;
+        line-height: 1.75;
+        text-align: left;
+      }
+      .poem {
+        font-size: 1.12rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Glowing Crescent Moon in Top Right -->
+  <div class="moon-container">
+    <svg viewBox="0 0 100 100" class="moon-svg">
+      <path d="M 55,10 A 38,38 0 1 0 90,58 A 30,30 0 1 1 55,10 Z" fill="#fffae6" />
+    </svg>
+  </div>
+
+  <!-- Canvas for Snow + Floating Small Love Emojis -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Main Letter Container -->
+  <div class="letter-container">
+    <div class="paper">
+      
+      <div class="prelude">
+        "If I had found the courage to cross that classroom while the teacher read 'The Road Not Taken'—if I had stepped out of the shadows and stood before you—these are the words I wish I had spoken."
+      </div>
+
+      <div class="salutation">To You,</div>
+
+      <div class="prose">
+        <p>I know that in the grand narrative of your life, I was likely just a background character—a nameless face sitting in the opposite corner of the room, fading quietly into the crowd. But for me, you were the entire plot.</p>
+
+        <p>You are like the sun to my moon. You radiate light so effortlessly, complete and whole entirely on your own. <span class="highlight">But without you, I am not.</span> I only ever existed in the warmth you cast across those desks, reflecting a light that was always yours.</p>
+
+        <p>You might never care for me, and maybe you never even knew my name, but every single instant of those quiet hours belonged to you. I wish I could have told you that seeing just one of your smiles felt like eternal happiness—as if, in a single second, I had found everything I could ever want in this world. You were the partner I dreamed of but never got to hold; the center of a universe you didn't even know you created.</p>
+
+        <p>I wish I had told you that while everyone else was listening to a lesson on diverged paths, I was standing at the hardest crossroad of my life: deciding whether to keep hiding in the safety of silence, or to walk across the room and hand you my heart.</p>
+
+        <p>Choosing to stay quiet was the easy path. But telling you all of this—standing before you and risking it all—that was the road not taken. And ever since that afternoon, it is the one declaration I wish I had given to you.</p>
+      </div>
+
+      <div class="divider">✧ ✦ ✧</div>
+
+      <div class="poem-title">The Words Unspoken</div>
+      
+      <div class="poem">
+        <span>In your story, I’m a background shade,</span>
+        <span>A fleeting thought meant to fade.</span>
+        <span>But in my heart, where truth resides,</span>
+        <span>You are the moon, the sun, the tides.</span>
+        <div class="stanza-break"></div>
+        <span>You are complete, bright and free,</span>
+        <span>While I am lost without your sea.</span>
+        <span>One smile from you across the floor</span>
+        <span>Was eternal bliss, and so much more.</span>
+        <div class="stanza-break"></div>
+        <span>I wished I said what was in my mind,</span>
+        <span>To leave my fear and doubts behind.</span>
+        <span>To tell you that my world was you—</span>
+        <span>The only road I never knew.</span>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Particle System: Snowflakes + Slow Small Love Emojis
+    const emojis = ['❤️', '💕', '💖', '✨', '🤍', '🌸'];
+    let particles = [];
+
+    class Particle {
+      constructor() {
+        this.reset();
+        this.y = Math.random() * height; // Initial random scatter
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = -20; // Spawn above screen
+        this.isEmoji = Math.random() < 0.28; // ~28% chance of love emoji, 72% snow
+        
+        if (this.isEmoji) {
+          this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+          this.fontSize = Math.floor(Math.random() * 7) + 11; // Small size (11px - 17px)
+          this.speed = Math.random() * 0.45 + 0.15; // Very slow drop
+          this.opacity = Math.random() * 0.5 + 0.35;
+        } else {
+          this.size = Math.random() * 2.2 + 0.8; // Small snowflake
+          this.speed = Math.random() * 0.6 + 0.2; // Slow falling
+          this.opacity = Math.random() * 0.6 + 0.3;
+        }
+
+        this.sway = Math.random() * Math.PI * 2;
+        this.swaySpeed = Math.random() * 0.015 + 0.005; // Gentle sway
+      }
+
+      update() {
+        this.y += this.speed;
+        this.sway += this.swaySpeed;
+        this.x += Math.sin(this.sway) * 0.35; // Soft horizontal drift
+
+        if (this.y > height + 25) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+
+        if (this.isEmoji) {
+          ctx.font = `${this.fontSize}px serif`;
+          ctx.fillText(this.emoji, this.x, this.y);
+        } else {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = "#ffffff";
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = "rgba(255, 255, 255, 0.8)";
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // Spawn 70 particles
+    for (let i = 0; i < 70; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
