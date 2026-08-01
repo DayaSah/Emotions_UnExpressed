@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Seconds of Eternity | The Ice and The Ember</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400&display=swap');
+
+        :root {
+            /* Background gradient: Dark starry night -> Snowy icy white -> Intense Pink -> Deep Fire Red */
+            --bg-gradient: linear-gradient(180deg, #050b14 0%, #1e3a5f 25%, #d9e4ec 50%, #e6739f 75%, #4a0010 100%);
+            --text-main: #f8f9fa;
+            --text-muted: #e2e8f0;
+            --accent-fire: #ff4d6d;
+            --accent-ice: #a0c4ff;
+            --glass-bg: rgba(10, 15, 30, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+        }
+
+        /* Canvas for Ice, Fire, Moon, and Stars */
+        #elemental-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Glassmorphism Story Container */
+        .story-container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(160, 196, 255, 0.4); /* Icy top border */
+            border-bottom: 1px solid rgba(255, 77, 109, 0.4); /* Fiery bottom border */
+            border-radius: 12px;
+            padding: 70px 80px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
+                        inset 0 20px 40px rgba(160, 196, 255, 0.05),
+                        inset 0 -20px 40px rgba(255, 77, 109, 0.05);
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 2.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--accent-ice), #fff, var(--accent-fire));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 30px;
+        }
+
+        .quote {
+            font-size: 1.45rem;
+            font-style: italic;
+            text-align: center;
+            color: #ffffff;
+            margin: 50px 0;
+            padding: 40px;
+            line-height: 1.8;
+            position: relative;
+            background: linear-gradient(135deg, rgba(160, 196, 255, 0.05) 0%, rgba(255, 77, 109, 0.05) 100%);
+            border-radius: 8px;
+        }
+
+        .quote::before, .quote::after {
+            content: "“";
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            position: absolute;
+            color: rgba(255,255,255,0.15);
+            line-height: 0;
+        }
+        .quote::before { top: 30px; left: 20px; }
+        .quote::after { content: "”"; bottom: 10px; right: 20px; }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.7rem;
+            color: #ffffff;
+            margin: 60px 0 25px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::before {
+            content: "❖";
+            font-size: 1.2rem;
+            background: linear-gradient(180deg, var(--accent-ice) 0%, var(--accent-fire) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 2;
+            margin-bottom: 30px;
+            color: rgba(248, 249, 250, 0.9);
+            text-align: justify;
+        }
+
+        .poem {
+            margin-top: 80px;
+            padding: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border-left: 2px solid var(--accent-ice);
+            border-right: 2px solid var(--accent-fire);
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .poem p {
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.35rem;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .poem .stanza-break {
+            height: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .story-container { padding: 40px 30px; }
+            h1 { font-size: 2.2rem; }
+            p, .poem p { font-size: 1.15rem; }
+            .quote { font-size: 1.2rem; padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas for Snow, Fire, Moon, and Stars -->
+    <canvas id="elemental-canvas"></canvas>
+
+    <div class="story-container">
+        <h1>Two Seconds of Eternity</h1>
+        <div class="subtitle">The Ice and The Ember</div>
+
+        <div class="quote">
+            While you were entirely lost in your two seconds of eternity, analyzing the tragic mathematics of the distance between us... I was drowning in the exact same frozen heartbeat, silently screaming for you to finally be brave.
+        </div>
+
+        <h2>I. THE CHAOS OF CLASS 12 AND THE GHOST</h2>
+        <p>Kathmandu was never meant to be a romantic escape for me; it was an iron forge. I was there for my Class 12 studies, suffocating under the immense weight of board exams, endless early-morning tuitions, and the crushing expectations of my family. My days were a brutal, blinding blur of heavy textbooks, the relentless blare of Ring Road traffic, and the bitter, exhausted taste of cheap coffee. I was supposed to be forging my future, leaving the quiet dust of our hometown—and everything it contained—far behind.</p>
+        <p>But memory is a cruel, relentless thing. No matter how many complex formulas I memorized, or how many pages of notes I furiously scribbled, my mind kept drifting back to a quiet boy in Room 204. I used to catch you looking at me when you thought my eyes were turned away. I knew you were brilliant. I knew you lived entirely inside your own head, locked away in an analytical fortress of your own design. You were a creature of pure logic, and I always wondered what catastrophic event it would take for you to finally break your own rules and speak to me.</p>
+
+        <h2>II. The Collision of Worlds</h2>
+        <p>Then came that suffocating, apocalyptic afternoon. The air in Kathmandu was thick with golden dust and the unbearable heat of a thousand running engines. I was sitting by the window of a packed, miserable local bus, staring completely blankly at the gridlock, utterly exhausted by the sheer volume of the city.</p>
+        <p>Suddenly, the relentless momentum of Kathmandu was forced to a dead halt. Another commuter bus crept up and ground to a stop mere inches from mine. Seeking a momentary escape from the stifling heat of the cabin, I turned my head to look blindly out the grimy glass. I expected to see nothing but another tired, nameless stranger in a city of three million. But the universe has a violently tragic sense of humor.</p>
+        <p>There you were.</p>
+
+        <h2>III. The Ice and The Ember</h2>
+        <p>The roaring chaos of the street instantly vanished. The heavy, suspended dust seemed to freeze mid-air. For two agonizing, infinite seconds, our eyes locked across the narrow two-foot abyss of empty air.</p>
+        <p>While you were lost in your two seconds of eternity, I was completely paralyzed in mine. In that single, suspended breath, the noisy streets evaporated. I remembered absolutely everything. I remembered the chalk dust suspended in the light of our old classroom. I remembered the heavy, unspoken tension that always hummed like a live wire between us.</p>
+        <p>When our eyes locked through that dirty glass, my heart stopped beating. I had spent years convincing myself that your icy, introverted nature meant I was nothing more than a ghost to you. But in those two microscopic seconds, your impenetrable fortress completely shattered. I saw the pure, violent shock on your face. I saw the raw, unfiltered desperation in your eyes, mirroring the exact same terrifying fire burning inside my own chest. You weren't looking <em>at</em> me; you were looking <em>into</em> my soul. In that suspended heartbeat, I finally realized the truth: you hadn't been ignoring me. You were just as terrified of the fire as I was.</p>
+
+        <h2>IV. The Anchor of Cowardice</h2>
+        <p>For a beautiful, fleeting moment, I thought you were finally going to move. I thought you would smash the glass, shout my name, or do <em>something</em> to break the terrible spell that bound us. My hand instinctively pressed flat against my window. I wanted to bridge the gap. I wanted to drag you out of your silence.</p>
+        <p>But then, the traffic light turned green.</p>
+        <p>The city violently reclaimed us. The bus lurched forward with a harsh, metallic scream. I gasped, frozen in my seat, entirely unable to overcome the old, familiar paralysis that anchored me down. I watched your face blur as my bus accelerated, tearing me away from the only real thing in the entire sprawling valley. I twisted violently in my seat, watching your silhouette fade into the exhaust smoke until you were entirely swallowed by the frantic river of metal.</p>
+
+        <h2>V. The Midnight Standoff</h2>
+        <p>That night in my tiny hostel room, the silence was deafening. My Class 12 books lay completely abandoned on the floor. The only light in the pitch-black room was the harsh, blue glow of my phone screen. I had your profile open. I saw the green dot. You were online.</p>
+        <p>My thumbs hovered over the keyboard, trembling. I typed, <em>“I saw you today.”</em> And then, swallowed by doubt, I deleted it. I typed, <em>“Why didn't you say anything?”</em> I deleted that, too. I was consumed by a fiery anger—at myself for being a coward, but mostly at you. You were the logical one. You were the one who could analyze systems and figure anything out. Why couldn't you figure <em>us</em> out?</p>
+        <p>I threw my phone onto the bed, staring fiercely at the ceiling. <em>No,</em> I told myself, letting my stubborn pride take over. <em>I shouldn't have to chase him. If this meant anything to him, if that look in his eyes was real, he will find the courage to message me first.</em></p>
+        <p>I waited for hours in the dark. I watched your active status pulse, then fade into a timestamp. The message never came. You never fought for it. And so, neither did I.</p>
+
+        <h2>VI. A Stubborn Refusal to Forget</h2>
+        <p>I used to foolishly believe that if two people were meant to be, the universe would somehow magically align the stars and push them together. I thought the world was a beautiful, poetic place that rewarded silent, patient longing.</p>
+        <p>I was so entirely wrong. The universe isn't a fairy tale; it’s a chaotic, indifferent machine. It will put the person you want exactly two feet away from you, just to brutally test you both. And if you do not reach out, if you do not violently fight for your own happiness with your own two hands, the universe will ruthlessly pull them away forever.</p>
+        <p>I accept that tragic reality now. I accept that our silence was a choice we both actively made in those two seconds. But even as I close my textbooks and force myself to walk into my future, there is one thing I have stubbornly refused to accept.</p>
+        <p>I have not accepted forgetting you. Until you find the courage to hit 'Enter', I will keep your memory perfectly alive in the space between the ice and the fire.</p>
+
+        <div class="poem">
+            <p>The city roared, the engines screamed,</p>
+            <p>I found the boy of whom I dreamed.</p>
+            <p>Through dusty glass, our gazes crossed,</p>
+            <p>Two seconds passed, and both were lost.</p>
+            <div class="stanza-break"></div>
+            <p>Your fortress made of quiet ice,</p>
+            <p>Demanded such a heavy price.</p>
+            <p>But through the pane, the walls came down,</p>
+            <p>And showed the fire where you'd drown.</p>
+            <div class="stanza-break"></div>
+            <p>I held my breath, I prayed you'd speak,</p>
+            <p>But both our cowardly hearts were weak.</p>
+            <p>The screen glowed blue beside my bed,</p>
+            <p>With all the screaming words unsaid.</p>
+            <div class="stanza-break"></div>
+            <p>I waited for your light to show,</p>
+            <p>I needed you to let me know.</p>
+            <p>But silence won the bitter fight,</p>
+            <p>And swallowed us into the night.</p>
+            <div class="stanza-break"></div>
+            <p>I've learned the stars won't fight for me,</p>
+            <p>If I refuse to cross the sea.</p>
+            <p>But though our paths may never set,</p>
+            <p>I stubbornly refuse to forget.</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('elemental-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let snowArray = [];
+        let fireArray = [];
+        let starsArray = [];
+        
+        // Adjust particle counts based on screen size
+        const isMobile = window.innerWidth < 768;
+        const numSnow = isMobile ? 50 : 150;
+        const numFire = isMobile ? 50 : 150;
+        const numStars = isMobile ? 100 : 250;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars(); // Re-init stars on resize to cover new area
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 1. Stars (Static but twinkling in the upper half)
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                // Stars mostly in the top 60% of the screen
+                this.y = Math.random() * (canvas.height * 0.6);
+                this.size = Math.random() * 1.5 + 0.5;
+                this.baseAlpha = Math.random() * 0.5 + 0.3;
+                this.blinkSpeed = Math.random() * 0.02 + 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            draw() {
+                this.angle += this.blinkSpeed;
+                let currentAlpha = this.baseAlpha + Math.sin(this.angle) * 0.3;
+                if(currentAlpha < 0) currentAlpha = 0;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+                ctx.fill();
+            }
+        }
+
+        // 2. Snow (Tiny White Dots falling DOWN)
+        class Snow {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedY = Math.random() * 1.5 + 0.5; // Falling down
+                this.speedX = (Math.random() - 0.5) * 0.5; // Slight sway
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                
+                // Reset to top if it falls off bottom
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        // 3. Fire (Tiny Red Dots flying UP)
+        class Fire {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 1;
+                this.speedY = Math.random() * 2 + 1; // Flying UP (will be subtracted)
+                this.speedX = (Math.random() - 0.5) * 1; // More frantic horizontal movement
+                this.opacity = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.y -= this.speedY; // Move UP
+                this.x += this.speedX;
+                
+                // Reset to bottom if it flies off top
+                if (this.y < 0) {
+                    this.y = canvas.height + 10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                // Fiery colors: Red, Orange, Deep Pink
+                const colors = ['255, 77, 109', '255, 50, 50', '255, 100, 0'];
+                const colorIndex = Math.floor(Math.random() * colors.length);
+                ctx.fillStyle = `rgba(${colors[1]}, ${this.opacity})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'red';
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset shadow for other elements
+            }
+        }
+
+        // 4. Draw Moon (Top Left)
+        function drawMoon() {
+            const moonX = canvas.width * 0.15;
+            const moonY = canvas.height * 0.15;
+            const moonRadius = isMobile ? 30 : 50;
+
+            ctx.beginPath();
+            ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#fdfcf0';
+            ctx.shadowBlur = 40;
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            ctx.fill();
+            
+            // Inner moon texture/glow
+            ctx.beginPath();
+            ctx.arc(moonX - (moonRadius*0.2), moonY - (moonRadius*0.2), moonRadius * 0.8, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fill();
+            
+            ctx.shadowBlur = 0; // Reset
+        }
+
+        function initStars() {
+            starsArray = [];
+            for (let i = 0; i < numStars; i++) {
+                starsArray.push(new Star());
+            }
+        }
+
+        function initParticles() {
+            snowArray = [];
+            fireArray = [];
+            for (let i = 0; i < numSnow; i++) snowArray.push(new Snow());
+            for (let i = 0; i < numFire; i++) fireArray.push(new Fire());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw celestial background
+            starsArray.forEach(star => star.draw());
+            drawMoon();
+            
+            // Update and draw Snow
+            snowArray.forEach(snow => {
+                snow.update();
+                snow.draw();
+            });
+
+            // Update and draw Fire
+            fireArray.forEach(fire => {
+                fire.update();
+                fire.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        initStars();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
