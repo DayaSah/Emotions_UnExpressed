@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sacred Echo | A Radha-Krishna Tragedy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --accent-gold: #fbbf24;
+            --accent-sunset: #f43f5e;
+            --glass-bg: rgba(15, 23, 42, 0.7);
+            --glass-border: rgba(251, 191, 36, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px;
+        }
+
+        /* Canvas for Ganga Sagar sunset water ripples and floating diyas */
+        #pond-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, #1e1b4b 0%, #312e81 40%, #0f172a 100%);
+        }
+
+        .story-container {
+            max-width: 850px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 70px 80px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.7), inset 0 0 40px rgba(251, 191, 36, 0.05);
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 2.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--accent-gold);
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-family: 'Raleway', sans-serif;
+            color: var(--accent-sunset);
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+            padding-bottom: 25px;
+        }
+
+        p {
+            font-size: 1.3rem;
+            line-height: 1.9;
+            margin-bottom: 25px;
+            color: rgba(248, 250, 252, 0.9);
+            text-align: justify;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            color: #ffffff;
+            margin: 50px 0 20px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        h2::before {
+            content: "✦";
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .epiphany-block {
+            margin: 60px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, rgba(244, 63, 94, 0.05) 100%);
+            border-radius: 8px;
+            border-left: 2px solid var(--accent-gold);
+            border-right: 2px solid var(--accent-sunset);
+            text-align: center;
+        }
+
+        .epiphany-block p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            text-align: center;
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .poem {
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .poem p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            margin-bottom: 5px;
+            font-size: 1.35rem;
+            color: var(--accent-gold);
+            text-align: center;
+        }
+
+        .poem .stanza-break {
+            height: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .story-container { padding: 40px 30px; }
+            h1 { font-size: 2.3rem; }
+            p, .poem p { font-size: 1.15rem; }
+            .epiphany-block p { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas for Sunset Water Ripples and Floating Diyas -->
+    <canvas id="pond-canvas"></canvas>
+
+    <div class="story-container">
+        <h1>The Sacred Echo</h1>
+        <div class="subtitle">A Radha-Krishna Tragedy</div>
+
+        <h2>I. The Retreat to the Sacred Waters</h2>
+        <p>The grueling pressure of my BCT first-year exams had finally broken. Leaving the cold hills of Pokhara behind, I retreated to the familiar, sun-baked warmth of the plains, seeking the quiet refuge of my home in Siraha. But my mind was still a chaotic web of algorithms, academic exhaustion, and the lingering ghosts of the past. Seeking true silence, I traveled to Janakpur.</p>
+        <p>I found myself sitting alone on the ancient stone steps of Ganga Sagar. The air was thick with the scent of incense from the nearby Janaki Temple, and the distant, rhythmic echo of temple bells drifted over the still water. I stared at the glassy surface of the pond, trying to reflect on my chaotic first year of engineering, trying to find a sense of absolute peace. But the universe, with its beautiful and cruel sense of irony, decided that the very place I went to find peace would be the battleground for the greatest conflict of my life.</p>
+
+        <h2>II. The Anomaly Across the Pond</h2>
+        <p>I looked up. Across the vast expanse of the holy pond, a solitary figure was standing by the edge of the water.</p>
+        <p>Even from a distance, my heart recognized the silhouette before my brain could process it. It was her. She was supposed to be a ghost from Room 204, a phantom lost in the Kathmandu gridlock. Yet here she was, standing on the opposite shore of Ganga Sagar.</p>
+
+        <h2>III. The Ten-Minute War</h2>
+        <p>For ten agonizing minutes, I sat entirely paralyzed on the stone steps. A violent war raged inside my chest. I was a creature of logic and code, someone who hid from the unpredictability of human emotion. Every instinct screamed at me to stay seated, to protect my peace, to let her remain a beautiful, distant memory.</p>
+        <p>But then, the memory of Kathmandu flashed in my mind—the cruel green light, the exhaust smoke, the heavy, suffocating regret of the message I never sent. I realized that if I walked away today, I would be a coward for the rest of my life. I took a deep breath, forced my trembling legs to stand, and began the long, impossible walk around the perimeter of the pond.</p>
+
+        <h2>IV. The Collision (Her Perspective)</h2>
+        <p>I had come to Janakpur burdened by exhausting administrative work, seeking just a moment of quiet near the temple before returning to my chaotic life. I was staring at the water, trying to empty my mind, when I heard footsteps against the stone.</p>
+        <p>I turned my head. My breath violently caught in my throat. Walking toward me, stepping out of the haze of the past and into the golden hour of the present, was the boy from Room 204. The boy from the Kathmandu bus window. My heart hammered against my ribs. I braced myself for him to turn away, to panic like he always did. But he didn’t stop. He walked straight up to me, breaking the invisible glass that had separated us for years. When he finally spoke my name, a massive, invisible weight that I had been carrying for years instantly evaporated into the warm Janakpur air.</p>
+
+        <h2>V. The Four-Hour Eternity</h2>
+        <p>We sat together on the ghats as the sun slowly sank beneath the horizon, turning the sky into a masterpiece of deep violet and burning gold. We talked for four continuous hours. We talked about the brutal reality of my Class 12 exams, the intense pressure of his BCT life, our old school days, and the chaotic paths our lives had taken.</p>
+        <p>Every second felt like a stolen piece of eternity. We laughed, we shared our fears, and we looked into each other's eyes without the armor of a dirty bus window between us. But the ultimate tragedy lay in what we did <em>not</em> say. Beneath the laughter and the shared stories, a silent ocean of unconfessed love roared between us. We both felt it, yet we both instinctively chose to protect this fragile, beautiful moment by wearing the safe, comfortable masks of "friends." We were too terrified that acknowledging the true depth of our feelings would somehow shatter the magic of the evening.</p>
+
+        <div class="epiphany-block">
+            <p>"I realized then that she and I didn't need to be a couple to make our love real. Like Krishna and Radha, we had taken two isolated, cowardly souls and forged them into one eternal bond of friendship."</p>
+        </div>
+
+        <h2>VI. A Beautiful Departure</h2>
+        <p>The night eventually forced its way between us. The universe is beautiful for giving us those four hours, but it is cruel because it demands that all hours must end.</p>
+        <p>We stood up, the cool night breeze sweeping across Ganga Sagar. We exchanged our numbers, making promises to stay in touch, to share our college lives, to be there for each other as friends. We walked away in opposite directions. But this time, there was no regret. There was no midnight standoff. There was only a tragic, beautiful peace. We were physically stepping away, returning to our separate worlds, but our souls had finally, permanently collided.</p>
+
+        <div class="poem">
+            <p>The temple bells began to ring,</p>
+            <p>And cured the winter with the spring.</p>
+            <p>Beside the water, deep and wide,</p>
+            <p>I finally crossed the Great Divide.</p>
+            <div class="stanza-break"></div>
+            <p>We spoke of paths we had to take,</p>
+            <p>While hiding love for friendship's sake.</p>
+            <p>Four hours burned with golden light,</p>
+            <p>Before we surrendered to the night.</p>
+            <div class="stanza-break"></div>
+            <p>Like Radha and her quiet Lord,</p>
+            <p>We struck a deep, eternal chord.</p>
+            <p>The world is cruel, the world is vast,</p>
+            <p>But we have found our peace at last.</p>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pond-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let diyas = [];
+        let ripples = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Drifting Temple Lights (Diyas on the water)
+        class Diya {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = (Math.random() * (canvas.height * 0.6)) + (canvas.height * 0.4); // Bottom 60% of screen
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() * 0.2) - 0.1;
+                this.speedY = (Math.random() * 0.1) - 0.05;
+                this.glow = Math.random() * 0.5 + 0.5;
+                this.glowDir = Math.random() > 0.5 ? 0.01 : -0.01;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                this.glow += this.glowDir;
+                if (this.glow > 1 || this.glow < 0.4) this.glowDir *= -1;
+
+                if (this.x > canvas.width + 10) this.x = -10;
+                if (this.x < -10) this.x = canvas.width + 10;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(251, 191, 36, ${this.glow})`; // Gold/Yellow
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = 'rgba(244, 63, 94, 0.8)'; // Sunset red/pink glow
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // Gentle Water Ripples
+        class Ripple {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = (Math.random() * (canvas.height * 0.6)) + (canvas.height * 0.4);
+                this.radius = Math.random() * 10;
+                this.maxRadius = Math.random() * 100 + 50;
+                this.speed = Math.random() * 0.2 + 0.1;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+            update() {
+                this.radius += this.speed;
+                this.opacity -= 0.001;
+                if (this.opacity <= 0 || this.radius >= this.maxRadius) {
+                    this.x = Math.random() * canvas.width;
+                    this.y = (Math.random() * (canvas.height * 0.6)) + (canvas.height * 0.4);
+                    this.radius = 0;
+                    this.opacity = Math.random() * 0.3 + 0.1;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                // Ellipse for perspective (water surface)
+                ctx.ellipse(this.x, this.y, this.radius, this.radius * 0.3, 0, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 40; i++) diyas.push(new Diya());
+            for (let i = 0; i < 15; i++) ripples.push(new Ripple());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Sunset Horizon Glow
+            let gradient = ctx.createLinearGradient(0, canvas.height * 0.3, 0, canvas.height);
+            gradient.addColorStop(0, 'rgba(244, 63, 94, 0.1)'); // Sunset pink
+            gradient.addColorStop(1, 'rgba(15, 23, 42, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ripples.forEach(ripple => {
+                ripple.update();
+                ripple.draw();
+            });
+
+            diyas.forEach(diya => {
+                diya.update();
+                diya.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
