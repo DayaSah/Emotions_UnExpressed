@@ -13,7 +13,348 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     
+    <style><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Unsent Drafts | Screaming into the Void</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@100;300;400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-color: #030508;
+            --text-main: #d1d9e6;
+            --text-muted: #64748b;
+            --accent: #5e81ac; /* Cool muted blue */
+            --accent-glow: rgba(94, 129, 172, 0.6);
+            --glass-bg: rgba(5, 8, 15, 0.75);
+            --glass-border: rgba(94, 129, 172, 0.2);
+            --cursor-color: #88c0d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        /* Digital Ash Canvas */
+        #void-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 30%, #0a0f18 0%, #030508 100%);
+        }
+
+        /* Glassmorphism Story Container */
+        .story-container {
+            max-width: 850px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 60px 70px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(94, 129, 172, 0.05);
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeIn 2.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.35rem;
+            text-align: center;
+            color: var(--text-main);
+            margin: 40px 0;
+            padding: 0 30px;
+            line-height: 1.7;
+            opacity: 0.9;
+            border-left: 2px solid var(--accent);
+            padding-left: 20px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin: 50px 0 20px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        h2::before {
+            content: ">_";
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        p {
+            font-size: 1.25rem;
+            line-height: 1.85;
+            margin-bottom: 25px;
+            color: rgba(209, 217, 230, 0.85);
+            text-align: justify;
+        }
+
+        /* Blinking Cursor Effect */
+        .blinking-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: var(--cursor-color);
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .poem {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(180deg, rgba(94, 129, 172, 0.05) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid rgba(94, 129, 172, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .poem p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+            color: var(--text-main);
+            opacity: 0.95;
+        }
+
+        .poem .stanza-break {
+            height: 20px;
+        }
+
+        .back-nav {
+            display: block;
+            text-align: center;
+            margin-top: 60px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .back-nav:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        @media (max-width: 768px) {
+            .story-container {
+                padding: 40px 30px;
+            }
+            h1 { font-size: 2.2rem; }
+            p, .poem p { font-size: 1.15rem; }
+            .quote { font-size: 1.2rem; padding: 0 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas for falling digital ash (deleted letters) -->
+    <canvas id="void-canvas"></canvas>
+
+    <div class="story-container">
+        <h1>The Backspace Key</h1>
+        <div class="subtitle">Screaming into the Void <span class="blinking-cursor"></span></div>
+
+        <div class="quote">
+            "I have written you a thousand letters in the quiet glow of a midnight screen, but the only witness to my confessions is a blinking cursor before the silence reclaims them all."
+        </div>
+
+        <h2>The Illusion of Proximity</h2>
+        <p>In the modern world, distance is a beautiful, cruel lie. I can sit in the absolute dark of my room, hundreds of miles away from wherever you are, and pull up your profile in a matter of seconds. I can see the timestamp of when you were last online. I can see the digital ghost of your presence, glowing softly against the harsh black of my monitor. Physically, we are continents of asphalt and crowded cities apart, but digitally, you are resting right beneath my fingertips.</p>
+        <p>For someone like me, who navigates the complexities of networks, algorithms, and digital architectures with effortless ease, this should be simple. It’s just data moving from one node to another. It is just a sequence of keystrokes. Yet, the vast, terrifying chasm of the real world has merely been compressed into the two millimeters of plastic beneath my 'Enter' key. And that gap is the one system I have never been able to hack.</p>
+
+        <h2>The 3:00 AM Confessions</h2>
+        <p>It always happens in the dead hours of the night, long after the rest of the world has surrendered to sleep. The screen casts a pale, cold light across my face. I open the chat window. The cursor blinks at me—a rhythmic, mocking heartbeat in the silence of my room. It waits for me to be brave.</p>
+        <p>I start typing. At first, it’s just a hesitant <em>"Hello."</em> Then, the dam breaks. I pour out the heavy, agonizing truths I could never say in Room 204 or across the exhaust-choked air of that Kathmandu street. I type out how much space you occupy in my mind. I tell you that my world is a chaotic, introverted fortress, and you are the only person I have ever wanted to let inside. I build towering paragraphs of raw, unfiltered honesty.</p>
+        <p>For a few fleeting minutes, in the safety of an unsent draft, we are finally talking. In this tiny text box, the misunderstanding is cleared. The bridge is built. I am no longer the quiet shadow in the corner, and you are no longer a distant star.</p>
+
+        <h2>The Coward's Erasure</h2>
+        <p>But then, my finger hovers over the 'Enter' key. The weight of reality crashes down, violently shattering the fantasy. The logic kicks in. <em>It’s been too long. It will be weird. You’ll think I’m crazy. You’ve probably moved on. What if you read it and just leave me on 'Seen'?</em></p>
+        <p>The fear of a definitive, silent rejection is far more terrifying than the comfortable ache of the unknown. As long as I don’t send it, the possibility of <em>us</em> remains perfectly intact inside my head. Slowly, deliberately, my finger moves to the Backspace key. I hold it down.</p>
+        <p>I watch as the letters rapidly devour themselves, collapsing backward into the void. The paragraphs shrink to sentences, the sentences to words, the words to nothing. The cursor retreats to the very edge of the screen, completely erasing my soul until the text box is as empty and silent as the space between us on that bus. I close the window. The screen goes dark. And once again, I am just a boy sitting alone in a silent room, screaming at the top of my lungs where no one can hear me.</p>
+
+        <div class="poem">
+            <p>The midnight glow, the heavy chest,</p>
+            <p>A thousand words I leave unsaid.</p>
+            <p>A digital ghost, a silent plea,</p>
+            <p>Across a vast, unyielding sea.</p>
+            <div class="stanza-break"></div>
+            <p>I build a bridge of glowing light,</p>
+            <p>Confessions born within the night.</p>
+            <p>I bare my soul in lines of text,</p>
+            <p>And wonder what might happen next.</p>
+            <div class="stanza-break"></div>
+            <p>But logic whispers, cold and stark,</p>
+            <p>And fear commands the quiet dark.</p>
+            <p>The finger falls, the letters fade,</p>
+            <p>I kill the universe I made.</p>
+            <div class="stanza-break"></div>
+            <p>The cursor blinks, perfectly blind,</p>
+            <p>To all the love I leave behind.</p>
+            <p>A silent screen, a tragic art—</p>
+            <p>The backspace key that broke my heart.</p>
+        </div>
+
+        <a href="index.html" class="back-nav">← Terminate Session</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('void-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let ashArray = [];
+        const numAsh = window.innerWidth < 768 ? 40 : 120;
+        
+        // Characters to represent deleted text / code
+        const characters = "abcdefghijklmnopqrstuvwxyz01001011.,;/[]{}<>?";
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class DigitalAsh {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.char = characters.charAt(Math.floor(Math.random() * characters.length));
+                this.fontSize = Math.random() * 12 + 8;
+                this.speedY = Math.random() * 0.8 + 0.2; // Slow falling
+                this.speedX = (Math.random() - 0.5) * 0.3; // Slight drift
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.fadeSpeed = Math.random() * 0.005 + 0.002;
+                this.fadingOut = Math.random() > 0.5;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                // Fade in and out to simulate typing/deleting
+                if (this.fadingOut) {
+                    this.opacity -= this.fadeSpeed;
+                    if (this.opacity <= 0.05) {
+                        this.fadingOut = false;
+                        this.char = characters.charAt(Math.floor(Math.random() * characters.length)); // Change char when invisible
+                    }
+                } else {
+                    this.opacity += this.fadeSpeed;
+                    if (this.opacity >= 0.5) this.fadingOut = true;
+                }
+
+                // Reset at top if it falls off screen
+                if (this.y > canvas.height) {
+                    this.y = -20;
+                    this.x = Math.random() * canvas.width;
+                }
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+            }
+            draw() {
+                ctx.font = `100 ${this.fontSize}px 'JetBrains Mono', monospace`;
+                ctx.fillStyle = `rgba(136, 192, 208, ${this.opacity})`; // Soft cyan
+                ctx.fillText(this.char, this.x, this.y);
+            }
+        }
+
+        function init() {
+            ashArray = [];
+            for (let i = 0; i < numAsh; i++) {
+                ashArray.push(new DigitalAsh());
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(3, 5, 8, 0.2)'; // Faint trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < ashArray.length; i++) {
+                ashArray[i].update();
+                ashArray[i].draw();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
         :root {
             --bg-color: #0f0a12;
             --card-bg: rgba(26, 18, 32, 0.65);
@@ -262,10 +603,19 @@
             </a>
             <!-- Link 7 -->
             <a href="Crossover.html" class="card">
-                <span class="card-num">VI.</span>
+                <span class="card-num">VII.</span>
                 <div class="card-content">
                     <h2>Crossover - 2 seconds of Eternity</h2>
                     <p>Crossover of two Soul that felt Like 2 Seconds Of Eternity</p>
+                </div>
+                <span class="card-arrow">&rarr;</span>
+            </a>
+            <!-- Link 8 -->
+            <a href="Crossover.html" class="card">
+                <span class="card-num">VIII.</span>
+                <div class="card-content">
+                    <h2>Screm into The Void</h2>
+                    <p>Unsent Digital Confession, Scream inti Void, Unsent Drafts</p>
                 </div>
                 <span class="card-arrow">&rarr;</span>
             </a>
